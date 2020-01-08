@@ -88,7 +88,7 @@ void gy_server_to_c2000_to_dongle(void)
 
 		if (n > 0)
 		{
-			printf("len[%4u]:server_to_c2000_to_dongle_buf = %s\n",n, tcp_buff);
+			printf("socket receive[%4u]:server_to_c2000_to_dongle_buf = %s\n",n, tcp_buff);
 			uart_init();//串口初始化
 			int ret = write(uartfd, tcp_buff, n);//将接收到的服务器发送过来的数据下发至dongle
 			if (ret == -1)
