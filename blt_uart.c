@@ -86,7 +86,6 @@ int set_opt(int fd, int nSpeed, int nBits, char nEvent, int nStop)//设置串口
 		perror("com set error");
 		return -1;
 	}
-	printf("set done!\n\r");
 	return 0;
 }
  
@@ -138,7 +137,7 @@ int dongle_to_c2000(void)//接收dongle发送给c2000的数据
 	bzero(uart_buff, sizeof(uart_buff));
 	int nread = read(uartfd, uart_buff, BUFFSIZE);
 	if (nread > 0) {
-		printf("uartfd read [%4u]:uart_buff = %s\n",nread, Hex2Str(uart_buff,strlen(uart_buff)));
+		printf("uartfd read[%4u]:uart_buff = %s\n",nread, Hex2Str(uart_buff,strlen(uart_buff)));
 	}
 	return nread;
 }
