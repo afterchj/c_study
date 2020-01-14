@@ -33,6 +33,11 @@
 #include <netinet/tcp.h>
 #include <sys/socket.h>
 
+/******time******/
+#include<sys/time.h>
+#include<time.h>
+#include <signal.h>
+
 #define BUFFSIZE  128
 
 /******************************blt_tcp.c************************************/
@@ -52,6 +57,7 @@ extern void *thrd_func_tcp_callback(void *arg);//thread_server_to_c2000_to_dongl
 extern void *thrd_func_uart_callback(void *arg);//thread_dongle_to_c2000_to_server回调函数
 //十六进制转字符串函数
 unsigned char* Hex2Str(const char * hexarray, int length);
+void sig_handler(int num);
 extern int main(int argc, const char *argv[]);
 /*****************************blt_uart.c***************************************/
 extern void uart_init(void);//串口初始化

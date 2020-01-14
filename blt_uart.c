@@ -97,11 +97,11 @@ void uart_init(void)//串口初始化
 		uart_close();
 		//sleep(1);
 		uartfd = open("/dev/ttyUSB0", O_RDWR);
+        // uartfd = open("/dev/ttyUSB1", O_RDWR);
 		if (uartfd < 0)
 		{
 			//printf("open usb0 error!\n");
 			perror("open fail!");
-            uartfd = open("/dev/ttyUSB1", O_RDWR);
 			//	exit(1);
 			continue;
 		}
