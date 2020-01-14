@@ -56,7 +56,10 @@ void *thrd_func_uart_callback(void *arg)//thread_dongle_to_c2000_to_server回调
 			if (m <= 0)
 			{
 				perror("send fail!");
-			}
+			}else
+            {
+                printf("socket send[%4u]:uart_buff = %s\n",nread, Hex2Str(uart_buff,strlen(uart_buff)));
+            }
 		}
 	}
 }

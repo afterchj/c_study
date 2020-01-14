@@ -5,7 +5,7 @@ unsigned char dest[100]={0};
 
 const unsigned char Num2CharTable[] = "0123456789ABCDEF";//16进制数据转换为字符串使用
 //int j = 0;//record number of 0xcc
-unsigned char string[50];
+unsigned char string[128];
 
 unsigned char * HexArrayToString(unsigned char *hexarray,int length)
 {

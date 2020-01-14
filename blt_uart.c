@@ -136,9 +136,9 @@ int dongle_to_c2000(void)//接收dongle发送给c2000的数据
 {
 	bzero(uart_buff, sizeof(uart_buff));
 	int nread = read(uartfd, uart_buff, BUFFSIZE);
-	if (nread > 0) {
-		printf("uartfd read[%4u]:uart_buff = %s\n",nread, Hex2Str(uart_buff,strlen(uart_buff)));
-	}
+	// if (nread > 0) {
+	// 	printf("uartfd read[%4u]:uart_buff = %s\n",nread, Hex2Str(uart_buff,strlen(uart_buff)));
+	// }
 	return nread;
 }
 
