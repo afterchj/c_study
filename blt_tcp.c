@@ -4,7 +4,7 @@ int sockfd;
 int uartfd;
 #define TIME_OUT_PORT_8003 25//设置接收超时时间
 #define SERVER_PORT 8001//8003
-#define SERV_IP_ADDR "192.168.51.95"/*"122.112.229.195"*/
+#define SERV_IP_ADDR "192.168.3.108"/*"122.112.229.195"*/
 
 void checknet(void)//检查网络是否正常，main函数中的网络初始化
 {
@@ -76,6 +76,7 @@ void gy_set_sockfd(void)//设置tcp通信的描述符：gy_c2000_sockfd
 
 void gy_server_to_c2000_to_dongle(void)
 {
+	signal(SIGALRM, sig_handler);
 	while (1)
 	{
 		struct timeval timeout = { TIME_OUT_PORT_8003,0 };//接收数据超时时间设置

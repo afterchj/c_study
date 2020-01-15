@@ -17,11 +17,25 @@ void sig_handler(int num)
     // printf("receive the signal %d.\n", num);
     int h=p->tm_hour+8;                                                                                                                                                                                                                                                                                     
     int m=p->tm_min;
-    printf("%s %d:%d:%d->receive the signal %d\n", wday[p->tm_wday], h, m, p->tm_sec,num);
-    alarm(10);
+    printf("current time is %d-%02d-%02d %02d:%02d:%02d\n",p->tm_year+1900,p->tm_mon+1,p->tm_mday,h,m,p->tm_sec);
+     if(h==17 & m==25)
+    {
+        printf("start excute task...\n");
+    }
+    if(h==17 & m==30)
+    {
+        printf("stop excute task...\n");
+    }
+    alarm(30);
 }
 int main(int argc, char *argv[]) 
 { 
+    time(&timep);
+    p=gmtime(&timep);
+    // printf("receive the signal %d.\n", num);
+    int h=p->tm_hour+8;                                                                                                                                                                                                                                                                                     
+    int m=p->tm_min;
+    printf("initial time is %d-%02d-%02d %02d:%02d:%02d\n",p->tm_year+1900,p->tm_mon+1,p->tm_mday,h,m,p->tm_sec);
     signal(SIGALRM, sig_handler);
     alarm(10);
     while(1)//做一个死循环，防止主线程提早退出，相等于线程中的join

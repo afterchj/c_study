@@ -1,60 +1,54 @@
 /*************************************************************************
  
-    > File Name: alarm.c
+    > File Name: blt_time.c
  
-    > Author:
+    > Author: hongjian.chen
  
-    > Mail:
+    > Mail: 766256898@qq.com
  
-    > Created Time: 2015Äê11ÔÂ20ÈÕ ÐÇÆÚÎå 21Ê±12·Ö52Ãë
+    > Created Time: 2019å¹´1æœˆ15æ—¥ æ˜ŸæœŸä¸‰ 15æ—¶12åˆ†52ç§’
  
  ************************************************************************/
+
 #include "blt_main.h"
 
 char *wday[]={"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-time_t timep;
-struct tm *p;
 
-void sig_handler(int num)
-{
+void sig_handler(int num) 
+{ 
+    char * s1="77011465FFFFFFFF2A00000000C000373700000000CCCC";
+    char * s2="77011465FFFFFFFF2A00000000C000323200000000CCCC";
+    int size=strlen(s1)+1;
     time(&timep);
     p=gmtime(&timep);
-    // printf("receive the signal %d.\n", num);
     int h=p->tm_hour+8;                                                                                                                                                                                                                                                                                     
     int m=p->tm_min;
-    printf("%s %d:%d:%d->receive the signal %d\n", wday[p->tm_wday], h, m, p->tm_sec,num);
-    if(h==11 & m==45)
+    int mon=p->tm_mon+1;
+    int day=p->tm_mday;
+    printf("current time is %d-%02d-%02d %02d:%02d:%02d\n",p->tm_year+1900,mon,day,h,m,p->tm_sec);
+    if(h==17 & m==5)
     {
         printf("start excute task...\n");
+        uart_init();//ä¸²å£åˆå§‹åŒ–
+	    int ret = write(uartfd, s1, size);//å°†æŽ¥æ”¶åˆ°çš„æœåŠ¡å™¨å‘é€è¿‡æ¥çš„æ•°æ®ä¸‹å‘è‡³dongle
+		if (ret == -1)
+		{
+			perror("write");
+			uart_init();//if uart error,open uart again
+			write(uartfd, s1, size);
+		}
     }
-    if(h==11 & m==48)
+    if(h==17 & m==10)
     {
         printf("stop excute task...\n");
+        uart_init();//ä¸²å£åˆå§‹åŒ–
+	    int ret = write(uartfd, s2, size);//å°†æŽ¥æ”¶åˆ°çš„æœåŠ¡å™¨å‘é€è¿‡æ¥çš„æ•°æ®ä¸‹å‘è‡³dongle
+		if (ret == -1)
+		{
+			perror("write");
+			uart_init();//if uart error,open uart again
+			write(uartfd, s2, size);
+		}
     }
-    alarm(20);
+    alarm(30);
 }
- 
-// int main()
-// {
-//     // time(&timep);
-//     // p=gmtime(&timep);
-//     // printf("%s %d:%d:%d\n", wday[p->tm_wday], p->tm_hour+8, p->tm_min, p->tm_sec);
-//     signal(SIGALRM, sig_handler);
-//     // alarm(10);
-//     // char cur_time[20];
-//     while(1){
-//         pause();
-//         printf("pause is over.\n");
-//     //     struct timeval tv;
-//     //     gettimeofday(&tv,NULL);//»ñÈ¡1970-1-1µ½ÏÖÔÚµÄÊ±¼ä½á¹û±£´æµ½tvÖÐ
-//     //     uint64_t sec=tv.tv_sec;
-//     //     uint64_t min=tv.tv_sec/60;
-//     //     struct tm cur_tm;//±£´æ×ª»»ºóµÄÊ±¼ä½á¹û
-//     //     localtime_r((time_t*)&sec,&cur_tm);
-//     //     char cur_time[20];
-//     //     snprintf(cur_time,20,"%d-%02d-%02d %02d:%02d:%02d",cur_tm.tm_year+1900,cur_tm.tm_mon+1,cur_tm.tm_mday,cur_tm.tm_hour,cur_tm.tm_min,cur_tm.tm_sec);
-//     //     printf("current time is %s\n",cur_time);//´òÓ¡µ±Ç°Ê±¼ä
-//     }
-//     exit(0);
-//     // return 0;
-// }

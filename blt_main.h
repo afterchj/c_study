@@ -1,9 +1,4 @@
-/*******net********/
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
+/*******main********/
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -19,24 +14,23 @@
 #include <fcntl.h>
 #include <strings.h>
 #include <sys/time.h>
+#include <time.h>
 #include <sys/types.h>
-#include <unistd.h>
 #include <sys/select.h>
 #include <string.h>
 #include <signal.h>
 #include <ctype.h>
 
-/******check_8001_net******/
+/******tcp******/
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
-#include <sys/socket.h>
 
-/******time******/
-#include<sys/time.h>
-#include<time.h>
-#include <signal.h>
 
 #define BUFFSIZE  128
 
@@ -55,6 +49,7 @@ unsigned char tcp_buff[BUFFSIZE];//server发送过来的16进制数据保存到�
 //主函数入口：网络初始化、串口初始化、相关线程初始化（BLE-C2000-SERVER、SERVER-C2000-BLE）、串口关闭、线程回收
 extern void *thrd_func_tcp_callback(void *arg);//thread_server_to_c2000_to_dongle回调函数
 extern void *thrd_func_uart_callback(void *arg);//thread_dongle_to_c2000_to_server回调函数
+void *thrd_func_time_callback(void *arg);
 //十六进制转字符串函数
 unsigned char* Hex2Str(const char * hexarray, int length);
 void sig_handler(int num);
@@ -63,3 +58,7 @@ extern int main(int argc, const char *argv[]);
 extern void uart_init(void);//串口初始化
 extern void uart_close(void);//串口关闭
 extern int dongle_to_c2000(void);//接收dongle发送给c2000的数据
+/*****************************blt_time.c***************************************/
+// char *wday[]={"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+time_t timep;
+struct tm *p;

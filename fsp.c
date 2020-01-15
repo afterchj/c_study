@@ -52,7 +52,7 @@ void f_putc()
 void fget_s()
 {
     FILE *fp;
-    char ch;
+    char s[128];
    
     //如果文件不存在，给出提示并退出
     if( (fp=fopen("D:\\demo.txt","rt")) == NULL ){
@@ -60,10 +60,9 @@ void fget_s()
         exit(0);
     }
     //每次读取一个字节，直到读取完毕
-    while( (ch=fgetc(fp)) != EOF ){
-        putchar(ch);
+    while( fgets(s,127,fp)!=NULL ){
+       printf("read line:%s\n",s);
     }
-    putchar('\n');  //输出换行符
     fclose(fp);
 }
 
@@ -118,8 +117,8 @@ int main(){
     // f_putc();
     // f_getc();
     // fput_s();
-    // fget_s();
-    test_binary();
+    fget_s();
+    // test_binary();
     return 0;
 }
 

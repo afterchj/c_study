@@ -8,7 +8,7 @@ int main(int argc, const char *argv[])
 {
     int res;
 	void * thrd_ret;
-    pthread_t tcp_thread, uart_thread;
+    pthread_t tcp_thread, uart_thread, time_thread;
     printf("main start!!\n");
 	checknet();//检查网络是否正常，main函数中的网络初始化
 	gy_set_sockfd();//设置tcp通信的描述符：gy_c2000_sockfd
@@ -26,7 +26,15 @@ int main(int argc, const char *argv[])
 		exit(-1);
 	}
 
+	res=pthread_create(&time_thread, NULL, thrd_func_time_callback, NULL);
+    if (res != 0)
+	{
+		perror("read_thread");
+		exit(-1);
+	}
+
     pthread_join(uart_thread, &thrd_ret);//线程回收
+	pthread_join(time_thread, &thrd_ret);//线程回收
     uart_close();//串口关闭
 	// pthread_join(write_thread, &thrd_ret);//线程回收
     close(sockfd);
@@ -62,4 +70,20 @@ void *thrd_func_uart_callback(void *arg)//thread_dongle_to_c2000_to_server回调
             }
 		}
 	}
+}
+
+void *thrd_func_time_callback(void *arg)//thread_dongle_to_c2000_to_server回调函数
+{
+	time(&timep);
+    p=gmtime(&timep);
+    // printf("receive the signal %d.\n", num);
+    int h=p->tm_hour+8;                                                                                                                                                                                                                                                                                     
+    int m=p->tm_min;
+    printf("initial time is %d-%02d-%02d %02d:%02d:%02d\n",p->tm_year+1900,p->tm_mon+1,p->tm_mday,h,m,p->tm_sec);
+    signal(SIGALRM, sig_handler);
+    alarm(10);
+    while(1)//做一个死循环，防止主线程提早退出，相等于线程中的join
+    {
+        pause();
+    }
 }
