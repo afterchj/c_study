@@ -4,7 +4,7 @@ int sockfd;
 int uartfd;
 #define TIME_OUT_PORT_8003 25//设置接收超时时间
 #define SERVER_PORT 8001//8003
-#define SERV_IP_ADDR "192.168.3.108"/*"122.112.229.195"*/
+#define SERV_IP_ADDR "192.168.3.108"/*"192.168.1.199"*//*"122.112.229.195"*/
 
 void checknet(void)//检查网络是否正常，main函数中的网络初始化
 {
@@ -83,10 +83,22 @@ void gy_server_to_c2000_to_dongle(void)
 
 		//设置接收超时
 		//setsockopt(gy_c2000_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(struct timeval));
-
+ 		FILE *fp;
 		memset(tcp_buff,0, BUFFSIZE);
 		int n = recv(sockfd, tcp_buff, BUFFSIZE, 0);
-
+		char dest[7]={0};
+		strncpy(dest,tcp_buff,6);
+		// printf("result=%s,flag=%d\n",dest,strcmp("770107",dest));
+		if(strcmp("770107",dest)==0)
+		{
+			if( (fp=fopen("./time.txt", "at+")) == NULL )
+			{
+				puts("Fail to open file!");
+				exit(0);
+    		}
+			fputs(tcp_buff, fp);
+    		fclose(fp);
+		}
 		if (n > 0)
 		{
 			printf("socket receive[%4u]:server_to_c2000_to_dongle_buf = %s\n",n, tcp_buff);

@@ -1,8 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <time.h>
+#include <stdint.h>
+#include <signal.h>
 
 #define N 2
+time_t timep;
+struct tm *p;
+
 void f_std(void);
 void f_file(void);
 
@@ -51,18 +59,47 @@ void f_putc()
 
 void fget_s()
 {
+    time(&timep);
+    p=gmtime(&timep);
     FILE *fp;
     char s[128];
-   
+    char str1[9]={0};
+    char str2[9]={0};
+    snprintf(str2,20,"%02d%02d%02d%02d",p->tm_mon+1,p->tm_mday,p->tm_hour+8,p->tm_min);
+    char dest[3] = {0};
     //如果文件不存在，给出提示并退出
-    if( (fp=fopen("D:\\demo.txt","rt")) == NULL ){
+    if( (fp=fopen("./time.txt","rt")) == NULL ){
         puts("Fail to open file!");
         exit(0);
     }
+    int i = 6;
     //每次读取一个字节，直到读取完毕
-    while( fgets(s,127,fp)!=NULL ){
-       printf("read line:%s\n",s);
+    fgets(s, 127, fp);
+    strncpy(str1,s+10,8);
+    printf("time_str=%s,flag=%d\n",str2,strcmp(str1,str2));
+    printf("read line=%s\n",str1);
+    for(i; i < strlen(s)-5; i+=2)
+    {
+        /* code */
+        strncpy(dest, s+i, 2);
+        // if (i==10) {
+        //     printf("read months:%d\n",atoi(dest));
+        // }
+        // if (i==12) {
+        //     printf("read days:%d\n",atoi(dest));
+        // }
+        // if (i==14) {
+        //     printf("read hours:%d\n",atoi(dest));
+        // }
+        // if (i==16) {
+        //     printf("read minutes:%d\n",atoi(dest));
+        // }
+        if (i==20) {
+            printf("read flag:%d\n",atoi(dest));
+        }
     }
+    
+    // int mon=strcpy
     fclose(fp);
 }
 
@@ -70,12 +107,13 @@ void fput_s()
 {
     FILE *fp;
     char str[102] = {0}, strTemp[100];
-    if( (fp=fopen("D:\\demo.txt", "at+")) == NULL ){
+    if( (fp=fopen("D:\\demo.txt", "at+")) == NULL )
+    {
         puts("Fail to open file!");
         exit(0);
     }
     printf("Input a string:");
-    gets(strTemp);
+    fgets(strTemp,127,fp);
     strcat(str, "\n");
     strcat(str, strTemp);
     fputs(str, fp);
@@ -111,6 +149,27 @@ void test_binary()
     fclose(fp);
 }
 
+void comp()
+{
+    FILE *fp;
+    char tcp_buff[]="770107202001171444CCCC";
+    char dest[7]={0};
+    char src[]={"770107"};
+	strncpy(dest,tcp_buff,6);
+    printf("result=%s,flag=%d\n",dest,strcmp(src,dest));
+	if(strcmp("770107",dest)==0)
+	{
+		if( (fp=fopen("./time.txt", "wt+")) == NULL )
+		{
+			puts("Fail to open file!");
+			exit(0);
+    	}
+		fputs(tcp_buff, fp);
+    	fclose(fp);
+	}
+}
+
+
 int main(){
     // f_std();
     // f_file();
@@ -119,12 +178,13 @@ int main(){
     // fput_s();
     fget_s();
     // test_binary();
+    // comp();
     return 0;
 }
 
 void f_file(void)
 {
-     FILE *fp;
+    FILE *fp;
     int i;
     pa=boya;
     pb=boyb;

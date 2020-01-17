@@ -100,7 +100,7 @@ void uart_init(void)//串口初始化
         // uartfd = open("/dev/ttyUSB1", O_RDWR);
 		if (uartfd < 0)
 		{
-			//printf("open usb0 error!\n");
+			//printf("open ttyS1 error!\n");
 			perror("open fail!");
 			//	exit(1);
 			continue;
